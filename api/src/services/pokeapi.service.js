@@ -5,7 +5,9 @@ import axios from 'axios';
 const pokeCache = new NodeCache({ stdTTL: 120 });
 
 export async function getPokemonDetails(pokemonIdOrName) {
-    const cacheKey = `pokemon_${pokemonIdOrName.toLowerCase()}`;
+    const nameOrId = String(pokemonIdOrName).toLowerCase();
+
+    const cacheKey = `pokemon_${nameOrId}`;
     const cachedData = pokeCache.get(cacheKey);
 
     if (cachedData) {
@@ -16,7 +18,7 @@ export async function getPokemonDetails(pokemonIdOrName) {
     console.log(`MISS: Consultando PokeAPI para ${pokemonIdOrName}`);
 
     try {
-        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonIdOrName.toLowerCase()}`);
+        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${nameOrId}`);
         const { id, name, types, sprites, stats } = response.data;
 
         // Extraemos solo lo que necesitamos
